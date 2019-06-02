@@ -1,0 +1,645 @@
+--컬럼의 이름을 변경하고 싶을 때
+select employee_id "EMP ID", hire_date "hdd"
+from employees;
+
+-- ||는 또는 연산을 의미한다.
+select employee_id||' 는 ' ||hire_date as "EMP_HIRE"
+from employees;
+
+--1.DEPARTMENTS테이블 구조
+desc departments
+
+desc employees
+
+--2.DEPARTMENTS 의 테이블의 모든 내용 출력
+select *
+from departments;
+
+--3.각 사원의 성 고용일 사원번호를 출력하라 사원번호가 가장 앞에
+--hire_date는 startdate로 출력
+select hire_date "STARTDATE", last_name, employee_id
+from employees;
+
+--4.jobid출력 중복 x
+select distinct job_id
+from employees;
+
+--5.가능한 모든 job code 출력 사원에게 배정되지 않은 job code도 출력
+select job_id
+from jobs;
+
+--6.사원의 이름,급여를 출력 각 칼럼의 이름은 empoloyee, salary employee는 성과 이름이 같이 줄여서 하나의 칼럼으로
+select last_name|| first_name as "Emoloyee", salary as "Salary"
+from employees;
+
+--7. 부서이름과 부서번호 출력
+select department_name, department_id
+from departments;
+
+--8.countires 테이블에 존재하는 모든 데이터 출력
+select *
+from countries;
+
+--9.12000이상 버는 사원의 성과 급여 출력
+select last_name, salary
+from employees
+where salary>=12000;
+
+--10.사원번호 176번인 사원의 성과 이름, 부서번호
+select last_name,first_name,department_id
+from employees
+where employee_id=176;
+
+--11.급여를 5000이하 받고 있는 사원의 성과 급여
+select last_name,salary
+from employees
+where salary<=5000;
+
+--12.급여를 12000이상 받고 있는 사원의 성과 이름, 급여, 부서번호
+select last_name,first_name,salary,department_id
+from employees
+where salary>=12000;
+
+--13.급여를 5000이상 12000이하로 받고 있는 사원의 사원번호 성 급여 출력
+--급여 높은순
+select employee_id,last_name,salary
+from employees
+where salary<=12000 and salary>=5000
+order by salary desc;
+
+--14.성이 Matos이거나 Taylor인 사원의 성과 시작날짜 job code를 출력 고용일 빠른순
+select last_name,hire_date,job_id
+from employees
+where last_name='Matos'orlast_name='Taylor' -> last_name in('Matos', 'Taylor' 도 가능(in->~~중에 하나)
+order by hire_date asc;
+
+--15.부서번호 20과 50사인 사원의 성 부서번호출력 성이 알파벳 순
+select last_name,department_id
+from employees
+where department_id>20 and department_id<50
+order by last_name asc;
+
+--16.50번 부서에서 일하는 사원들이 근무하는 job id 중복 제거
+select distinct job_id
+from employees
+where department_id=50;
+
+--17.2003년 or 2005년에 고용된 사원의 성과 고용일 출력
+select last_name,hire_date
+from employees
+where hire_date >= '03/01/01' and hire_date <= '05/12/31';
+
+--18.관리자(manager)가 없는 사원의 성과 job code출력
+select last_name,job_id
+from employees
+where manager_id IS NULL;
+
+--19.commission을 받고 있는 사원의 번호 급여 commission이 커지는 순
+select employee_id,salary,commission_pct
+from employees
+where commission_pct is not null and commission_pct>0
+order by salary, commission_pct;
+
+--20.급여가 30000보다 작으면서 부서번호가 100보다 작은 부서에 근무하는 사원의 성 
+부서번호, 급여 job code 출력
+select last_name,department_id,salary,job_id
+from employees
+where salary<3000 and department_id<100;
+
+--21.사원 급여의 최고 최저 합 평균을 그하라 Maximum, Minimum, Sum, Average 로 컬럼이름 정함
+select max(salary) as "Maximum", min(salary) as "Minimum", sum(salary) as "Sum", avg(salary) as "Average"
+from employees;
+
+--22.각 JOB마다 사원 급여 최고 최저 합 평균 Maximum, Minimum, Sum, Average 로 컬럼이름 정함
+select job_id, max(salary) as "Maximum", min(salary) as "Minimum",sum(salary) as "Sum", avg(salary) as "Average"
+from employees
+group by job_id;
+
+★--23.같은 JOB을 하는 사원의 숫자를 출력하라 job_id를 포함★
+select job_id, count(*) as "Count"
+from employees
+group by job_id;
+
+★--24.manager역할(상사)를 하고 있는 사원의 숫자를 출력하라★
+select count(manager_id)
+from departments;
+
+--25.급여가 5000 이하인 사원들만 대상으로 부서번호별 급여의 합 출력
+select department_id, sum(salary) as "Sum_Salary"
+from employees
+where salary <= 5000
+group by department_id;
+
+--26.사원의 수가 5명이상인 job_id별로 급여의 최소값을 구하라
+select job_id, min(salary)
+from employees
+group by job_id
+having count(*) >= 5;
+
+--27. 100번 이하 부서에 소속된 사원번호, 성, 부서번호, 부서명 출력
+select employee_id, e.department_id, department_name
+from employees e join departments d
+on e.department_id = d.department_id
+where e.department_id <= 100;
+
+--28. 모든 부서의 주소 출력. location id, street address, city, state또는, country_id
+select location_id, street_address, city, state_province, country_id
+from departments natural join locations;
+province, country를 출력해야 한다. natural join을 사용한다.
+
+★--29. Tronto에서 근무하는 사원의 last name, job id, department number★
+department name을 출력하라
+select last_name, job_id, d.department_id, department_name
+from employees e join departments d
+on e.department_id = d.department_id
+join locations l
+on l.location_id = d.location_id
+where city = 'Toronto';
+
+--30. 사원의 번호, 사원의 이름, 관리자의 번호, 관리자의 이름을 출력하라
+EMP_NAME, MANAGER#, MANAGER_NAME으로 출력한다.
+
+--31. 관리자가 없는 사원을 포함하여 사원의 번호 사원의 이름 관리자의 번호'
+관리자의 이름을 출력하라. EMP, EMP_NAME, MANAGER#, MANAGER_NAME으로 출력한다.
+
+--32. 사원의 번호, 성, JOB_CODE, JOB_TITLE을 출력하라.
+select employee_id, last_name, job_id, job_title
+from employees natural join jobs;
+
+★--33. 모든 부서의 번호, 이름, 부서장의 성을 출력하라.★
+select d.department_id, department_name, last_name
+from departments d join employees e
+on e.employee_id = d.manager_id;
+
+--34. 사원의 번호, 사원의 이름(성과 이름), 관리자의 번호 관리자의 이름(성과이름)을 출력하라.
+EMP#, EMP_NAME MANAGER#, MANAGER_NAME으로 출력한다
+select e.emplyee_id as EMP#, e.last_name||e.first_name as EMP_NAME, m.manager_id as MANAGER#, m.first_name||m.last_name as MANAGER_NAME
+from employees e join employees m
+on e.manager_id = m.employee_id;
+
+--35. 관리자가 없는 사원을 포함하여, 사원의 번호, 사원의 이름, 관리자의 번호, 관리자의 이름(성과이름)을 출력하라
+EMP#, EMP_NAME, MANAGER#, MANAGER_NAME으로 출력
+select e.employee_id as "EMP#", e.first_name || e.last_name as "EMP_NAME", m.employee_id as "MANAGER#", m.first_name || m.last_name as "MANAGER_NAME"
+from employees e left outer join employees m
+on e.manager_id = m.employee_id;
+
+★--36. 같은 JOB을 하는 사원의 숫자를 출력하라. JOB의 이름이 출력되어야 한다.★
+select job_title, count(job_id)
+from employees natural join jobs
+group by job_title;
+또는 이것도 가능....
+select job_title, count(employee_id)
+from jobs natural join employees
+group by job_title;
+또는
+select job_title, count(*)
+from employees natural join jobs
+group by job_title;
+
+--37.담당관리자보다 먼저 채용된 사원의 이름(FIRST_NAME)과 채용날짜,
+해당관리자의 이름(FIRST_NAME)과 채용 날짜를 출력하라.
+select e.first_name, e.hire_date, m.first_name, m.hire_date
+from employees e join employees m
+on e.manager_id = m.employee_id
+where e.hire_date < m.hire_date;
+
+(집합연산)
+--38. 소속 사원이 없는 부서의 이름을 출력하라.
+select department_name
+from departments
+minus
+select department_name
+from employees e join departments d
+on e.department_id = d.department_id;
+(부속질의도 가능)
+
+--39. 배당된 사원이 없는 업무의 이름( job_title)을 출력하라.
+select job_title
+from jobs
+minus
+select job_title
+from employees natural join jobs;
+(부속질의도 가능)
+select job_title
+from jobs
+minus
+select job_title
+from jobs
+where job_id in (select job_id
+from employees);
+
+--40. Shipping 부서와 Human Resources 부서의 부서 이름과 주소(address)를 출력하라. 
+집합연산을 이용.
+select department_name, street_address
+from departments d join locations l
+on d.location_id = l.location_id
+where department_name = 'Shipping'
+union
+select department_name, street_address
+from departments d join locations l
+on d.location_id = l.location_id
+where department_name = 'Human Resources'; ( data 값 을 비교할 때는 single qoute 작은따옴표)
+
+--41. IT부서와 Finance 부서 둘 다가 같이 위치한 Country_ID를 출력하라. 집합연산을 이용한다.
+select country_id
+from departments natural join locations
+where department_name = 'IT'
+intersect
+select country_id
+from departments natural join locations
+where department_name = 'Finance';
+
+(부속질의)
+--42. 최고의 급여를 받고 있는 사원의 first_name을 출력하라.
+select first_name
+from employees
+where salary = (select max(salary)
+from employees);
+
+--43. ★ 사원의 수가 5명 이상인 부서의 부서 이름을 출력하라. ★
+select department_name
+from departments d
+where 5 <= (select count(*)
+from employees e
+where d.department_id = e.department_id);
+
+--44. ★ 업무 이름에 Purchasing이 들어간 업무를 하고 있는 사원의 first_name을 출력하라. ★
+select first_name
+from employees
+where job_id in (select job_id
+from jobs
+where job_title like '%Purchasing%');
+
+(Outer Join)
+--45. 사원이 소속되지 않은 부서를 포함하여, 부서이름과 해당 부서에 소속된 사원이름(first_name)을 
+출력하라.
+select department_name, first_name
+from departments d left outer join employees e
+on d.department_id = e.department_id;
+
+--46. 업무가 배정되지 않은 사원과 사원이 배정되지 않은 업무를 포함하여, 모든 
+사원 이름(first_name)과 업무이름(job_title)을 출력하라.
+select first_name, job_title
+from employees e full outer join jobs j
+on e.job_id = j.job_id;
+
+--데이터 정의어 ( Data Definition Language )--
+
+--1. 다음 테이블 instance 차트를 기반으로 DEPT3 테이블을 생성한다.(카톡참조)
+create table dept3(
+id number(7) constraint dept_pk primary key,
+name varchar2(25));
+
+--2. 다음 테이블 instance 차트를 기반으로 EMP3 테이블을 생성한다.(카톡참조)
+create table emp3(
+id number(7, 2),
+last_name varchar2(25),
+first_name varchar2(25),
+dept_id number(7, 2),
+foreign key (dept_id) references dept3(id));
+
+--3. employees 테이블의 구조를 기반으로 employees2 테이블 생성 employee_id, first_name, last_name, salary, departments_id 만 포함
+열 이름 각각 id, first_name, last_name, salary, dept_id 지정. 테이블 구조만 생성, 데이터를 가져오진 x.
+create table employees2(
+id number(6) constraint emp_pk primary key,
+first_name varchar2(20),
+last_name varchar2(20),
+salary number(8),
+dept_id number(4));
+
+--4. 다음과 같이 긴 성을 입력할 수 있도록 emp3 테이블을 수정.(카톡참조)
+alter table emp3 modify last_name varchar2(50);
+
+--5. emp3 테이블에 LOC라는 칼럼을 추가하라. varchar2 데이터 타입이어야 하며, 
+최대 10의 길이를 가진다. 디폴트 값으로 'LA'값을 입력한다.
+alter table emp3 add loc varchar2(10) default 'LA';
+
+--6. emp3의 LOC라는 칼럼이름을 LOC2로 변경하라.
+alter table emp3 rename column loc to loc2;
+
+--7. employees2 테이블에서 first_name 열을 삭제한다. 삭제되었음을 확인한다.
+alter table employees2 drop column first_name;
+
+--8. dept3 테이블의 id 컬럼을 삭제한다. 삭제가 불가능하다면, 
+가능하도록 하라.(foreign key 때문에 삭제 안됨)
+alter table emp3 drop column dept_id;
+alter table dept3 drop column id;
+
+--9. emp3 테이블을 삭제한다.
+drop table emp3;
+
+(제한조건 캡처 참조 1~10)
+
+--1. ( 이거 질문해보기... )
+create table dept3
+select department_id, department_name
+where 2=1 (true가 아닌 조건을 넣으면 데이터의 값을 가져오지 않는다. 구조만 가져옴.),
+(where 조건 안쓰면 데이터를 다 가져옴)
+from departments;
+alter table dept3 add constraint my_dept_id_pk primary key(id);
+
+--2.
+create table emp3(
+id number(7),
+last_name varchar2(25),
+first_name varchar2(25),
+dept_id number(7),
+constraint emp3_id_pk primary key(id));
+
+--3.
+alter table emp3 add constraint my_emp_dept_id foreign key(id) references dept3(id) on delete set null;
+
+--4. 
+alter table emp3 add manager_id number(7) references emp3(id);
+
+--5. 
+alter table emp3 add commission number(2, 2) check(commission >= 0);
+
+--6. 
+drop table dept3; 테이블 자체(구조)를 드랍하는건 불가능. 참조무결성 제한조건이 남아있기 때문
+on delete set null -> 투플(tuple)단위임. 값 하나를 삭제할 경우. 위에랑 관계x 
+
+--7.
+alter table dept3 drop constraint my_dept_id_pk;
+불가능하다. dept의 pk인 my_dept_id_pk를 emp3테이블이 참조하고 있기 때문이다.
+
+--8.
+alter table emp3 drop constraint my_emp_dept_id; ( 외래키 삭제 )
+
+--9.
+alter table dept3 drop constraint my_dept_id_pk; ( 외래키 삭제했기 때문에 이제는 가능 )
+
+--10.
+이제는 된다.
+
+-- 내 학번으로 새로운 작업환경 만들긔~~ ( 책 참조 ) --
+
+(DML 캡처 참조 1~10), DML실습 lab 파일들 다운로드.
+
+--1.
+insert into my_employee
+values (1, 'Patel', 'Ralph', 'rpatel', 895);
+
+--2.
+insert into my_employee(id, last_name, first_name, userid, salary)
+values (2, 'dance', 'betty', 'bdans', 860);
+
+--3.
+insert into my_employee
+values (3, 'blrl', 'ben', 'bblrl', 1100);
+insert into my_employee
+values (4, 'newman', 'chad', 'cnewman', 750);
+
+--4.
+select *
+from my_employee;
+
+--5.
+commit; ( 커밋하면 다른 사용자와 데이터 공유 )
+
+--6.
+update my_employee
+set last_name = 'drexler'
+where last_name = 'blrl';  또는 where employee_id = 3;
+
+--7.
+update my_employee
+set salary = 1000
+where salary in (select salary
+from my_employee
+where salary < 1000);
+
+또는
+
+update my_employee
+set salary = 1000
+where salary < 1000;
+
+--8.
+select *
+from my_employee;
+
+--9.
+delete
+from my_employee
+where last_name = 'dance' and first_name = 'betty';
+select *
+from my_employee;
+commit;
+
+--10.
+insert into my_employee
+values (5, 'ropobera', 'audrey', 'aropebur', 1550);
+select *
+from my_employee;
+
+( DML2 ) -- 캡처 참조
+
+--1.
+select employee_id, hire_date, salary, manager_id
+from employees
+where employee_id < 125;
+
+--2.
+insert into special_sal(employee_id, salary)
+select employee_id, salary
+from employees
+where employee_id < 125 and salary > 20000;
+
+--3.
+insert into sal_history(employee_id, hire_date, salary)
+select employee_id, hire_date, salary
+from employees
+where salary < 20000 and employee_id < 125;
+insert into mgr_history(employee_id, manager_id, salary)
+select employee_id, manager_id, salary
+from employees
+where salary < 20000 and employee_id < 125;
+
+--4.
+insert into sal_history_2(empid, hiredate, sal)
+values (207, to_date('2015-05-10', 'yyyy-mm-dd'), 5000);
+
+--5.
+select *
+from sal_history_2;
+
+--6.
+insert into sal_history_2(empid, hiredate, salary)
+values (208, to_date('2015-05-16', 'yyyy-mm-dd'), 10000);
+select *
+from sal_history_2;
+
+또는
+
+insert into sal_history_2(empid, hiredate, salary)
+values (208, sysdate, 10000) // sysdate 는 virtual date 이다. 
+select *
+from sal_history_2;
+
+--7.
+update sal_history_2
+set sal = sal*1.1
+where empid <= 200;
+
+--8.
+delete
+from sal_history_2
+where sal<=10000;
+
+( 내장함수 ) -- 캡처 참조
+
+--1.
+select last_name, round(salary, -3), trunc(commission_pct, 1)
+from employees;
+
+--2.
+select ceil(3.14), floor(3.14), abs(3.14)
+from dual;
+
+또는
+
+select ceil(3.14), floor(3.14), 3.14
+from dual;
+
+--3.
+select upper(last_name)
+from employees
+where department_id = 60;
+
+--4.
+select 'Kim Joon Ho', length('Joon Ho')
+from dual;
+
+--5.
+select employee_id, phone_number, substr(phone_number, 1, 3)
+from employees
+where department_id = 50 or department_id = 60 or department_id = 90;
+
+--6.
+select employee_id, lpad(salary, 6, '*'), salary
+from employees
+where commission_pct > 0.1;
+
+--7. ★
+select employee_id, end_date, last_day(add_months(end_date, 2))
+from job_history;
+
+--8.
+select to_char(sysdate, 'yyyy/mm/dd hh12:mi:ss am')
+from dual;
+
+--9.
+select employee_id, to_char(start_date, 'yyyy/mm/dd day'), to_char(end_date, 'yyyy/mm/dd day')
+from job_history
+where employee_id >= 200 and employee_id <300;
+
+--10. // '이'가 들어가면 <= >= 붙여주기
+select last_name, hire_date
+from employees
+where hire_date <= to_date('19990301', 'yyyy.mm.dd');
+
+--11.
+select last_name, salary, to_char(hire_date, 'yyyy-mm-dd')
+from employees
+where salary >= 20000
+order by salary desc;
+
+--12. ( 서브쿼리)
+
+
+--13. (서브쿼리)
+select last_name, first_name, salary
+from (select last_name, first_name, salary
+from employees
+order by salary desc)
+where rownum <=3;
+
+( 서브쿼리 )
+
+--1.
+select (select department_name
+from departments d
+where d.department_id = e.department_id) "name", max(salary) "Top_Salary"
+from employees e
+group by e.department_id;
+
+--2.
+select first_name, hire_date
+from (select department_id
+from employees
+where employee_id = 102) d, employees e
+where e.department_id = d.department_id and e.employee_id <> 102;
+
+--3.
+select employee_id, last_name, salary
+from employees
+where salary >= ( select avg(salary)
+from employees )
+order by salary asc;
+
+--4.
+select last_name, salary
+from employees
+where manager_id in (select employee_id
+from employees
+where upper(last_name) = 'KING');
+
+--5.
+select last_name, salary
+from employees
+where salary > all ( select salary
+from employees
+where department_id = 60);
+
+--6.
+select employee_id, last_name, salary
+from employees
+where salary > some ( select salary
+from employees
+where upper(last_name) like '%U%')
+order by salary asc;
+
+( 뷰 )
+
+--1.
+create view employee_vu
+as select employee_id, first_name ||' '|| last_name as "EMPLOYEE", department_id
+from employees;
+
+--2.
+select employee, department_id
+from employee_vu;
+
+--3.
+create view department_vu
+as select department_name, avg(salary) as avg_sal, e.first_name
+from departments d join employees e
+on d.department_id = e.department_id and d.manager_id = e.employee_id
+group by department_name, e.first_name;
+
+select *
+from department_vu; 
+
+--4.
+create or replace view employee_vu(employee,department)
+as select first_name ||' '|| last_name as "EMPLOYEE", department_id
+from employees
+where department_id = 80;
+
+--5.
+drop view department_vu;
+
+( 인덱스 )
+
+--1.
+create index ix_lastname on employees(last_name); 
+
+--2.
+create index ix_empdmp on employees(employee_id, department_id);
+
+--3.
+create index ix_sal on employees(salary desc);
+
+--4.
+drop index ix_sal;
