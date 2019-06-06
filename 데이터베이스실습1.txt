@@ -611,7 +611,7 @@ from employees;
 select employee, department_id
 from employee_vu;
 
---3.
+--3.¡Ú
 create view department_vu
 as select department_name, avg(salary) as avg_sal, e.first_name
 from departments d join employees e
@@ -638,7 +638,7 @@ create index ix_lastname on employees(last_name);
 --2.
 create index ix_empdmp on employees(employee_id, department_id);
 
---3.
+--3.¡Ú
 create index ix_sal on employees(salary desc);
 
 --4.
