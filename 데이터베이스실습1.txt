@@ -330,13 +330,11 @@ drop table emp3;
 
 (제한조건 캡처 참조 1~10)
 
---1. ( 이거 질문해보기... )
-create table dept3
-select department_id, department_name
-where 2=1 (true가 아닌 조건을 넣으면 데이터의 값을 가져오지 않는다. 구조만 가져옴.),
-(where 조건 안쓰면 데이터를 다 가져옴)
-from departments;
-alter table dept3 add constraint my_dept_id_pk primary key(id);
+--1.
+create table dept3 as
+select department_name name, department_id id,
+from departments
+where 1=2;
 
 --2.
 create table emp3(
