@@ -335,6 +335,7 @@ create table dept3 as
 select department_name name, department_id id,
 from departments
 where 1=2;
+(where절이 거짓일 경우 구조만 가져옴.)
 
 --2.
 create table emp3(
