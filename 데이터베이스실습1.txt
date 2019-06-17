@@ -296,7 +296,7 @@ id number(7, 2),
 last_name varchar2(25),
 first_name varchar2(25),
 dept_id number(7, 2),
-foreign key (dept_id) references dept3(id));
+constraint emp3_fk foreign key (dept_id) references dept3(id));
 
 --3. employees 테이블의 구조를 기반으로 employees2 테이블 생성 employee_id, first_name, last_name, salary, departments_id 만 포함
 열 이름 각각 id, first_name, last_name, salary, dept_id 지정. 테이블 구조만 생성, 데이터를 가져오진 x.
@@ -464,7 +464,7 @@ select *
 from sal_history_2;
 
 --6.
-insert into sal_history_2(empid, hiredate, salary)
+insert into sal_history_2(empid, hiredate, sal)
 values (208, to_date('2015-05-16', 'yyyy-mm-dd'), 10000);
 select *
 from sal_history_2;
@@ -556,7 +556,7 @@ where rownum <=3;
 
 ( 서브쿼리 )
 
---1.
+--1. ★( 스칼라 부속질의 )★
 select (select department_name
 from departments d
 where d.department_id = e.department_id) "name", max(salary) "Top_Salary"
