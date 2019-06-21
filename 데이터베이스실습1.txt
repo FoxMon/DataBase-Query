@@ -6,7 +6,7 @@ from employees;
 select employee_id||' 는 ' ||hire_date as "EMP_HIRE"
 from employees;
 
---1.DEPARTMENTS테이블 구조
+--1.DEPARTMENTS테이블 구조.
 desc departments
 
 desc employees
