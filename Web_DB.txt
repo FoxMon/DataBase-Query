@@ -1,0 +1,40 @@
+create table free_bulletine(
+contentnum number(7) primary key,
+title varchar2(50),
+mem_name varchar2(10),
+uploaddate date,
+clicknum number(7)
+);
+
+create table notice(
+contentnum number(7) primary key,
+nt_title varchar2(50),
+mem_name varchar2(10),
+uploaddate date,
+clicknum number(7)
+);
+
+create table friends(
+mem_name varchar2(10),
+fr_name varchar2(20),
+address varchar2(25),
+gender varchar2(2),
+age number(3),
+sup_date date
+);
+
+create table login(
+logid varchar2(25) primary key,
+logpw varchar(25),
+mem_name varchar2(20),
+birthdate date,
+address varchar2(25)
+);
+
+create table pictures(
+contentnum number(7) primary key,
+title varchar2(50),
+mem_name varchar2(10),
+uploaddate date,
+clicknum number(7)
+);
